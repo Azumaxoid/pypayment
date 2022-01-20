@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from services import CreditExamination
 app = Flask(__name__)
 
 incomes = [
@@ -9,7 +10,10 @@ incomes = [
 def post_payment_auth():
   data = request.get_json()
   print(data)
-  return jsonify({ 'authorized': True, 'message': 'hoge' })
+  if CreditExamination.exam('test', data['amount']):
+    return jsonify({ 'authorised': True })
+  else:
+    return jsonify({ 'authorised': False, 'message': 'Payment declined: amount exceeded. [' + str(data['amount']) + ']' })
 
 
 @app.route('/incomes', methods=['POST'])

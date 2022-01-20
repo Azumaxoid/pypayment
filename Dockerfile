@@ -1,9 +1,13 @@
-FROM python:3.9-alpine
+FROM admarcel/alpine-python-grpcio
 
 WORKDIR /app
 
+RUN apk update
 RUN apk add gcc build-base linux-headers pcre pcre-dev
+RUN pip install --upgrade pip
 RUN pip install flask uwsgi newrelic
+RUN pip install --upgrade setuptools
+RUN pip install newrelic[infinite-tracing]
 RUN apk add uwsgi-python3
 
 COPY . /app
